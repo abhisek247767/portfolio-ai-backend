@@ -1,0 +1,19 @@
+{
+  "name": "abhisek-portfolio-rag-backend",
+  "version": "1.0.0",
+  "description": "RAG-based Gemini chatbot backend for Abhisek Roy portfolio",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "NODE_ENV=development node server.js"
+  },
+  "dependencies": {
+    "@google/genai": "^1.43.0",
+    "axios": "^1.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.19.0",
+    "pdf-parse": "^1.1.1",
+    "react-markdown": "^10.1.0"
+  }
+}

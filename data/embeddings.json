@@ -1,0 +1,25 @@
+{
+  "createdAt": "2026-03-01T16:32:31.844Z",
+  "chunks": [
+    {
+      "id": 0,
+      "text": "Personal Overview  Name: Abhisek Roy  Location: Kolkata, West Bengal, India  Role: Full-stack Software Developer / Research & Development Engineer  Phone: +91 -7029008311  Email Id: abhisekroy169@gmail.com  LinkedIn: linkedin.com/in/royabhisek247767  GitHub: https://github.com/abhisek247767  Professional Summary: An experienced software developer with over two years of hands-on experience building scalable web applications. Specialized in ReactJS, NodeJS, and Java, with a focus on delivering innovative solutions in agile environments and a passion for mastering the \"art of coding\". Technical Skills  Programming Languages: Java, JavaScript, TypeScript, C, and Python.  Backend Technologies: NodeJS, Express, Spring Boot, Spring MVC, GraphQL, and Drupal (PHP).  Frontend Technologies: ReactJS, NextJS, Angular, SpineJS, HTML, CSS, and Tailwind CSS.  Databases: MongoDB, PostgreSQL, and MySQL.  Cloud & DevOps: AWS, Docker, Git, GitHub, Bitbucket, GitLab, and Jira.  Specialized To"
+    },
+    {
+      "id": 1,
+      "text": ": ReactJS, NextJS, Angular, SpineJS, HTML, CSS, and Tailwind CSS.  Databases: MongoDB, PostgreSQL, and MySQL.  Cloud & DevOps: AWS, Docker, Git, GitHub, Bitbucket, GitLab, and Jira.  Specialized Tools: Spring Tool Suite, Postman, Power Apps, and Power Automate. Professional Experience Radiant Sage Ventures | Research & Development Engineer (June 2024 – Present)  Focus: Leading the development of a DICOM-based medical image viewer supporting multi-modality image rendering.  Key Contributions: Implemented advanced clinical trial analysis tools, including Freehand ROI, Ellipse, Length, and Bidirectional annotations.  Technical Achievements: Developed annotation persistence, versioning, layout customization, and real-time updates for target lesion management.  Tech Stack: Spring Boot, ReactJS, Tailwind CSS, PostgreSQL, Git, Bitbucket, Jira. SproutsAI | Consultant Software Engineer (July 2024 – May 2025)  Focus: Building AI-powered recruitment solutions used by over 100 clients, inc"
+    },
+    {
+      "id": 2,
+      "text": "eactJS, Tailwind CSS, PostgreSQL, Git, Bitbucket, Jira. SproutsAI | Consultant Software Engineer (July 2024 – May 2025)  Focus: Building AI-powered recruitment solutions used by over 100 clients, including MIPS and Tech Mahindra.  Key Contributions: Led development for Job Generation, Email Sequencing, Analytics, and Referral Services.  AI Integration: Implemented Resume Parsing, auto-sourcing, and a Scoring Engine to automate candidate matching and ranking.  Tech Stack: Node.js, React.js, Tailwind CSS, MongoDB, Jest. Interra Information Technologies (InterraIT) | Member of Technical Staff - L4 (Jan 2023 – July 2024)  Focus: Full-stack development and website management.  Key Contributions: Worked on the Job Crafting Tool for the University of Colorado and the University of Michigan.  Responsibilities: Managed the corporate website using Drupal and ReactJS, resolved bugs, and deployed applications on AWS.  Tech Stack: Spring MVC, SpineJS, Shopify, MySQL, AWS, Drupal (PHP). Key "
+    },
+    {
+      "id": 3,
+      "text": "  Responsibilities: Managed the corporate website using Drupal and ReactJS, resolved bugs, and deployed applications on AWS.  Tech Stack: Spring MVC, SpineJS, Shopify, MySQL, AWS, Drupal (PHP). Key Projects  Recipe AI: A full-stack application using gemini-2.0-flash for intelligent recipe generation, featuring OTP authentication and secure CRUD operations.  QuickBlog AI: A blog-generation tool utilizing gemini-2.5-flash with a Spring Boot backend and React frontend.  Urbanization Analysis: A final year project using Python and satellite imagery to detect spatio-temporal change in Newtown, Kolkata, correlating urban growth with infrastructure demands. Education & Certifications  Bachelor of Technology in Information Technology: Maulana Abul Kalam Azad University of Technology (MAKAUT), West Bengal (Graduated July 2023). CGPA: 9.34.  Higher Secondary Education: Chakdaha Purbachal Vidyapith (83%).  Certifications: o AI For Everyone. o The Bits and Bytes of Computer Networking. o P"
+    },
+    {
+      "id": 4,
+      "text": ", West Bengal (Graduated July 2023). CGPA: 9.34.  Higher Secondary Education: Chakdaha Purbachal Vidyapith (83%).  Certifications: o AI For Everyone. o The Bits and Bytes of Computer Networking. o Programming for Everybody (Python). o C for Everyone: Programming Fundamentals. Soft Skills & Languages  Soft Skills: Effective Time Management, Team Collaboration, and Clear Communication.  Languages: English (Professional Working) and Bengali (Native)."
+    }
+  ]
+}
