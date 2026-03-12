@@ -40,15 +40,9 @@ async function getAnswerForQuery(message, history) {
     .map((c, idx) => `Chunk ${idx + 1}:\n${c.text}`)
     .join('\n\n');
 
-  const systemInstruction =
-    'You are a helpful AI assistant that answers questions about Abhisek Roy using ONLY the provided context. ' +
-    'If the answer is not clearly contained in the context, say you do not know and suggest the user ask something related to the provided information.';
-
   const conversationHistory = Array.isArray(history) ? history : [];
 
-  const prompt = `
-${systemInstruction}
-
+const prompt = `
 Context about Abhisek:
 ${contextText}
 
@@ -61,9 +55,7 @@ ${conversationHistory
 
 New user question:
 ${message}
-
-Please answer in a friendly, concise way suitable for a personal portfolio website visitor.
-  `.trim();
+`.trim();
 
   const reply = await generateChatCompletion(prompt);
   return reply;
