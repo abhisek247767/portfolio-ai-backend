@@ -14,41 +14,61 @@ const ai = new GoogleGenAI({
   apiKey: GEMINI_API_KEY,
 });
 
-async function getEmbeddingForText(text) {
-  try {
-    const response = await ai.models.embedContent({
-      model: GEMINI_EMBEDDING_MODEL,
-      contents: text,
-    });
 
-    return response.embeddings.values;
-  } catch (error) {
-    console.error("Error generating embedding:", error);
-    throw error;
+const CHAT_MAX_RETRIES = parseInt(process.env.GEMINI_CHAT_MAX_RETRIES, 10);
+const CHAT_RETRY_DELAY_MS = parseInt(process.env.GEMINI_CHAT_RETRY_DELAY_MS, 10);
+
+if (Number.isNaN(CHAT_MAX_RETRIES) || Number.isNaN(CHAT_RETRY_DELAY_MS)) {
+  console.warn("GEMINI_CHAT_MAX_RETRIES or GEMINI_CHAT_RETRY_DELAY_MS is not set; chat calls will not be retried.");
+}
+
+// 429 = rate limited / quota, 500/503/504 = model overloaded or temporarily down.
+// Other errors (400 bad request, 403 key, 404 model) won't fix themselves, so no retry.
+const RETRYABLE_STATUS = new Set([429, 500, 503, 504]);
+
+function isRetryable(error) {
+  return RETRYABLE_STATUS.has(error?.status);
+}
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function withRetry(fn, label) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      if (!(attempt < CHAT_MAX_RETRIES) || !isRetryable(error)) throw error;
+      const delay = CHAT_RETRY_DELAY_MS * 2 ** attempt + Math.floor(Math.random() * 250);
+      console.warn(
+        `${label} failed with status ${error.status}; retry ${attempt + 1}/${CHAT_MAX_RETRIES} in ${delay}ms`
+      );
+      await sleep(delay);
+    }
   }
 }
 
-
-
-
 async function generateChatCompletion(userMessage) {
   try {
-    const response = await ai.models.generateContent({
-      model: GEMINI_CHAT_MODEL,
+    const response = await withRetry(
+      () =>
+        ai.models.generateContent({
+          model: GEMINI_CHAT_MODEL,
 
-      contents: [
-        {
-          role: "user",
-          parts: [
+          contents: [
             {
-              text: `${systemPrompt}\n\nUser Question: ${userMessage}`,
+              role: "user",
+              parts: [
+                {
+                  text: `${systemPrompt}\n\nUser Question: ${userMessage}`,
+                },
+              ],
             },
           ],
-        },
-      ],
 
-      generationConfig,
-    });
+          generationConfig,
+        }),
+      "Chat completion"
+    );
 
     return response.text;
   } catch (error) {
@@ -60,7 +80,6 @@ async function generateChatCompletion(userMessage) {
 }
 
 module.exports = {
-  getEmbeddingForText,
   generateChatCompletion,
 };
 

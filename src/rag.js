@@ -1,10 +1,10 @@
 const path = require('path');
 const { loadPdfText } = require('./pdfLoader');
-const { chunkText } = require('./textUtils');
+const { RecursiveCharacterTextSplitter } = require('@langchain/textsplitters');
 const {
-  loadOrCreateEmbeddingsStore,
+  loadOrCreateVectorStore,
   getTopKRelevantChunks
-} = require('./embeddingsStore');
+} = require('./vectorStore');
 const { generateChatCompletion } = require('./geminiClient');
 
 let embeddingsStore = null;
@@ -14,14 +14,37 @@ function isInitialized() {
   return initialized;
 }
 
-async function initializeRag(pdfFilePath) {
+const CHUNK_SIZE = 1000;
+const CHUNK_OVERLAP = 200;
+
+// Splits on paragraphs -> lines -> words, so chunks don't cut mid-sentence.
+const splitter = new RecursiveCharacterTextSplitter({
+  chunkSize: CHUNK_SIZE,
+  chunkOverlap: CHUNK_OVERLAP
+});
+
+async function splitIntoChunks(text) {
+  const parts = await splitter.splitText(text);
+  return parts.map((p) => p.replace(/[ \t]+/g, ' ').trim()).filter(Boolean);
+}
+
+async function initializeRag(pdfFilePath, { force = false } = {}) {
   try {
-  const absolutePdfPath = path.resolve(pdfFilePath);
-  const pdfText = await loadPdfText(absolutePdfPath);
+    const absolutePdfPath = path.resolve(pdfFilePath);
+    const pdfText = await loadPdfText(absolutePdfPath);
 
-    const chunks = chunkText(pdfText, 1000, 200);
+    const chunks = await splitIntoChunks(pdfText);
 
-    embeddingsStore = await loadOrCreateEmbeddingsStore(chunks);
+    embeddingsStore = await loadOrCreateVectorStore(
+      chunks,
+      {
+        source: path.basename(absolutePdfPath),
+        splitter: 'RecursiveCharacterTextSplitter',
+        chunkSize: CHUNK_SIZE,
+        chunkOverlap: CHUNK_OVERLAP
+      },
+      { force }
+    );
     initialized = true;
   } catch (error) {
     console.error('Error initializing RAG:', error);
