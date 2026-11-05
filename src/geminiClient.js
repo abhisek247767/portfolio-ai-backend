@@ -14,22 +14,7 @@ const ai = new GoogleGenAI({
   apiKey: GEMINI_API_KEY,
 });
 
-async function getEmbeddingForText(text) {
-  try {
-    const response = await ai.models.embedContent({
-      model: GEMINI_EMBEDDING_MODEL,
-      contents: text,
-    });
-
-    return response.embeddings.values;
-  } catch (error) {
-    console.error("Error generating embedding:", error);
-    throw error;
-  }
-}
-
-
-
+// Embeddings are handled by LangChain in src/vectorStore.js.
 
 async function generateChatCompletion(userMessage) {
   try {
@@ -60,7 +45,6 @@ async function generateChatCompletion(userMessage) {
 }
 
 module.exports = {
-  getEmbeddingForText,
   generateChatCompletion,
 };
 

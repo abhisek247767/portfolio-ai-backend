@@ -50,7 +50,9 @@ async function start() {
     console.warn('Warning: GEMINI_API_KEY is not set. The RAG chatbot will not work until you configure it in a .env file.');
   }
 
-  const pdfPath = path.join(__dirname, 'data', 'abhisek_profile.pdf');
+  const pdfPath = process.env.PROFILE_PDF_PATH
+    ? path.resolve(process.env.PROFILE_PDF_PATH)
+    : path.join(__dirname, 'data', 'abhisek_profile.pdf');
   try {
     await initializeRag(pdfPath);
     console.log('RAG initialization complete.');
