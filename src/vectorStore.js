@@ -4,6 +4,8 @@ const crypto = require('crypto');
 const { GoogleGenerativeAIEmbeddings } = require('@langchain/google-genai');
 const { MemoryVectorStore } = require('@langchain/classic/vectorstores/memory');
 const { Document } = require('@langchain/core/documents');
+const { traceable } = require('langsmith/traceable');
+const { langsmithClient } = require('./tracing');
 
 const DATA_DIR = path.join(__dirname, '..', 'data');
 const STORE_FILE = path.join(DATA_DIR, 'embeddings.json');
@@ -121,5 +123,17 @@ async function getTopKRelevantChunks(store, query, k = 5) {
 
 module.exports = {
   loadOrCreateVectorStore,
-  getTopKRelevantChunks
+  getTopKRelevantChunks: traceable(getTopKRelevantChunks, {
+    name: 'retrieve-chunks',
+    run_type: 'retriever',
+    client: langsmithClient,
+    processInputs: (inputs) => ({ query: inputs.args?.[1], k: inputs.args?.[2] ?? 5 }),
+    processOutputs: (outputs) => ({
+      documents: (outputs.outputs || []).map((c) => ({
+        type: 'Document',
+        page_content: c.text,
+        metadata: { id: c.id, score: c.score }
+      }))
+    })
+  })
 };

@@ -6,6 +6,8 @@ const {
   getTopKRelevantChunks
 } = require('./vectorStore');
 const { generateChatCompletion } = require('./geminiClient');
+const { traceable } = require('langsmith/traceable');
+const { langsmithClient } = require('./tracing');
 
 let embeddingsStore = null;
 let initialized = false;
@@ -86,7 +88,13 @@ ${message}
 
 module.exports = {
   initializeRag,
-  getAnswerForQuery,
+  getAnswerForQuery: traceable(getAnswerForQuery, {
+    name: 'portfolio-chat',
+    run_type: 'chain',
+    client: langsmithClient,
+    metadata: { chatModel: process.env.GEMINI_CHAT_MODEL },
+    processInputs: (inputs) => ({ message: inputs.args?.[0], history: inputs.args?.[1] })
+  }),
   isInitialized
 };
 
