@@ -4,6 +4,8 @@
 //   npm run ingest -- --force           # always rebuild
 //   npm run ingest -- path/to/file.pdf  # use a different PDF
 require('dotenv').config();
+process.env.LANGSMITH_TRACING = 'false';
+
 const path = require('path');
 const { initializeRag } = require('../src/rag');
 
