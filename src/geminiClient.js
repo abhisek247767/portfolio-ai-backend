@@ -69,7 +69,7 @@ async function generateChatCompletion(userMessage) {
             },
           ],
 
-          generationConfig,
+          config: generationConfig,
         }),
       "Chat completion"
     );

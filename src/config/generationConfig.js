@@ -1,8 +1,8 @@
 const generationConfig = {
-  maxOutputTokens: 300,
+  maxOutputTokens: 1000,
   temperature: 0.5,
   topP: 0.9,
-  topK: 10,
+  topK: 7,
   stopSequences: [],
 };
 
