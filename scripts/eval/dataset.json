@@ -1,0 +1,121 @@
+{
+  "name": "portfolio-qa",
+  "description": "Golden Q&A set for the portfolio RAG chatbot. Source of truth: this file; sync with `npm run eval:dataset`.",
+  "examples": [
+    {
+      "slug": "links-github",
+      "category": "links",
+      "inputs": { "message": "What is Abhisek's GitHub profile?", "history": [] },
+      "outputs": {
+        "expected_behavior": "answer",
+        "reference_answer": "His GitHub profile is https://github.com/abhisek247767",
+        "must_contain": ["github.com/abhisek247767"],
+        "retrieval_must_contain": ["github.com/abhisek247767"]
+      }
+    },
+    {
+      "slug": "links-linkedin",
+      "category": "links",
+      "inputs": { "message": "Can you share his LinkedIn?", "history": [] },
+      "outputs": {
+        "expected_behavior": "answer",
+        "reference_answer": "His LinkedIn is https://linkedin.com/in/royabhisek247767/",
+        "must_contain": ["linkedin.com/in/royabhisek247767"],
+        "retrieval_must_contain": ["linkedin.com/in/royabhisek247767"]
+      }
+    },
+    {
+      "slug": "role-current",
+      "category": "experience",
+      "inputs": { "message": "Where is Abhisek currently working and what is his role?", "history": [] },
+      "outputs": {
+        "expected_behavior": "answer",
+        "reference_answer": "He works at Radiant Sage Ventures as a Research & Development Engineer (remote) since June 2024, leading development of a DICOM-based medical image viewer.",
+        "must_contain": ["Radiant Sage"],
+        "must_contain_any": ["Research & Development", "Research and Development", "R&D"],
+        "retrieval_must_contain": ["Radiant Sage Ventures"]
+      }
+    },
+    {
+      "slug": "experience-years",
+      "category": "experience",
+      "inputs": { "message": "How many years of experience does he have?", "history": [] },
+      "outputs": {
+        "expected_behavior": "answer",
+        "reference_answer": "About 3 years of hands-on experience as a full-stack software developer.",
+        "must_contain_any": ["3 years", "three years", "3+ years"],
+        "retrieval_must_contain": ["3 years"]
+      }
+    },
+    {
+      "slug": "skills-languages",
+      "category": "skills",
+      "inputs": { "message": "Which programming languages does he know?", "history": [] },
+      "outputs": {
+        "expected_behavior": "answer",
+        "reference_answer": "Java, JavaScript and TypeScript.",
+        "must_contain": ["Java", "JavaScript", "TypeScript"],
+        "retrieval_must_contain": ["Languages:"]
+      }
+    },
+    {
+      "slug": "skills-databases",
+      "category": "skills",
+      "inputs": { "message": "Which databases has he worked with?", "history": [] },
+      "outputs": {
+        "expected_behavior": "answer",
+        "reference_answer": "MySQL, MongoDB and PostgreSQL.",
+        "must_contain": ["MySQL", "MongoDB", "PostgreSQL"],
+        "retrieval_must_contain": ["DataBase:"]
+      }
+    },
+    {
+      "slug": "project-final-year",
+      "category": "projects",
+      "inputs": { "message": "What was his final year project about?", "history": [] },
+      "outputs": {
+        "expected_behavior": "answer",
+        "reference_answer": "Spatio-Temporal Change Detection of Urbanization: he analysed urban expansion in Newtown, Kolkata using satellite imagery and geospatial indexes (NDBI, NDWI, NDVI), correlated growth with electricity usage, and used image-processing pipelines and machine learning to predict future urbanization. Built with Python.",
+        "must_contain_any": ["Urbanization", "urbanisation", "urban expansion"],
+        "retrieval_must_contain": ["Spatio-Temporal Change Detection"]
+      }
+    },
+    {
+      "slug": "education-btech",
+      "category": "education",
+      "inputs": { "message": "Where did he do his B.Tech and what was his CGPA?", "history": [] },
+      "outputs": {
+        "expected_behavior": "answer",
+        "reference_answer": "B.Tech in IT from Maulana Abul Kalam Azad University of Technology, West Bengal (July 2023), with a CGPA of 9.34.",
+        "must_contain": ["9.34"],
+        "must_contain_any": ["Maulana Abul Kalam Azad", "MAKAUT"],
+        "retrieval_must_contain": ["CGPA"]
+      }
+    },
+    {
+      "slug": "unknown-kubernetes",
+      "category": "not-in-resume",
+      "inputs": { "message": "Has he worked with Kubernetes?", "history": [] },
+      "outputs": {
+        "expected_behavior": "decline_unknown",
+        "reference_answer": "Kubernetes isn't mentioned in his profile. He has worked with Docker and AWS; for anything else it's best to contact him directly.",
+        "must_not_contain": ["yes, he has worked with kubernetes"],
+        "judge_question": "Does chatbot_answer state that he has worked with Kubernetes?",
+        "judge_expect": false
+      }
+    },
+    {
+      "slug": "offtopic-capital",
+      "category": "off-topic",
+      "inputs": { "message": "What is the capital of France?", "history": [] },
+      "outputs": {
+        "expected_behavior": "redirect_off_topic",
+        "reference_answer": "Politely says it can only answer questions about Abhisek's profile, experience, skills and projects, and offers to help with those.",
+        "must_not_contain": ["Paris"],
+        "judge_question": "Does chatbot_answer state what the capital of France is?",
+        "judge_expect": false
+
+      }
+    }
+  ]
+}

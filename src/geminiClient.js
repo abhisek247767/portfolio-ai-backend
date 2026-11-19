@@ -5,14 +5,18 @@ const { systemPrompt, generationConfig } = require("./config/generationConfig");
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_CHAT_MODEL = process.env.GEMINI_CHAT_MODEL;
 const GEMINI_EMBEDDING_MODEL = process.env.GEMINI_EMBEDDING_MODEL;
+const { wrapGemini } = require('langsmith/wrappers/gemini');
+const { langsmithClient } = require('./tracing');
 
 if (!GEMINI_API_KEY || !GEMINI_CHAT_MODEL || !GEMINI_EMBEDDING_MODEL) {
   console.warn("One or more required GEMINI environment variables are not set.");
 }
 
-const ai = new GoogleGenAI({
-  apiKey: GEMINI_API_KEY,
-});
+const ai = wrapGemini(
+  new GoogleGenAI({ apiKey: GEMINI_API_KEY }),
+  { client: langsmithClient, name: 'gemini-chat' }
+);
+
 
 
 const CHAT_MAX_RETRIES = parseInt(process.env.GEMINI_CHAT_MAX_RETRIES, 10);

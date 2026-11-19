@@ -2,6 +2,9 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
+const { waitUntil } = require('@vercel/functions');
+const { langsmithClient } = require('./src/tracing');
+
 require('dotenv').config();
 
 const { initializeRag, getAnswerForQuery, isInitialized } = require('./src/rag');
@@ -38,6 +41,8 @@ app.post('/chat', async (req, res) => {
     const answer = await getAnswerForQuery(message, safeHistory);
 
     res.json({ reply: answer });
+    waitUntil(langsmithClient.awaitPendingTraceBatches());
+
   } catch (err) {
     console.error('Error in /chat:', err);
     res.status(500).json({ error: 'Something went wrong while generating a response.' });

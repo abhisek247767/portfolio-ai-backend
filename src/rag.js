@@ -6,6 +6,8 @@ const {
   getTopKRelevantChunks
 } = require('./vectorStore');
 const { generateChatCompletion } = require('./geminiClient');
+const { traceable } = require('langsmith/traceable');
+const { langsmithClient } = require('./tracing');
 
 let embeddingsStore = null;
 let initialized = false;
@@ -52,20 +54,24 @@ async function initializeRag(pdfFilePath, { force = false } = {}) {
   }
 }
 
-async function getAnswerForQuery(message, history) {
+const TOP_K = 5;
+
+// Shared by /chat and the evaluation runner, so evals test the real pipeline.
+async function retrieveChunks(message, k = TOP_K) {
   if (!initialized || !embeddingsStore) {
     throw new Error('RAG not initialized yet');
   }
+  return getTopKRelevantChunks(embeddingsStore, message, k);
+}
 
-  const topChunks = await getTopKRelevantChunks(embeddingsStore, message, 5);
-
+function buildPrompt(message, history, topChunks) {
   const contextText = topChunks
     .map((c, idx) => `Chunk ${idx + 1}:\n${c.text}`)
     .join('\n\n');
 
   const conversationHistory = Array.isArray(history) ? history : [];
 
-const prompt = `
+  return `
 Context about Abhisek:
 ${contextText}
 
@@ -79,15 +85,26 @@ ${conversationHistory
 New user question:
 ${message}
 `.trim();
+}
 
-  const reply = await generateChatCompletion(prompt);
-  return reply;
+async function getAnswerForQuery(message, history) {
+  const topChunks = await retrieveChunks(message);
+  const prompt = buildPrompt(message, history, topChunks);
+  return generateChatCompletion(prompt);
 }
 
 module.exports = {
   initializeRag,
-  getAnswerForQuery,
-  isInitialized
+  getAnswerForQuery: traceable(getAnswerForQuery, {
+    name: 'portfolio-chat',
+    run_type: 'chain',
+    client: langsmithClient,
+    metadata: { chatModel: process.env.GEMINI_CHAT_MODEL },
+    processInputs: (inputs) => ({ message: inputs.args?.[0], history: inputs.args?.[1] })
+  }),
+  isInitialized,
+  retrieveChunks,
+  buildPrompt
 };
 
 
