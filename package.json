@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node server.js",
     "dev": "NODE_ENV=development node server.js",
-    "ingest": "node scripts/ingest.js"
+    "ingest": "node scripts/ingest.js",
+    "eval:dataset": "node scripts/eval/createDataset.js",
+    "eval": "node scripts/eval/run.js"
   },
   "dependencies": {
     "@google/genai": "^1.43.0",
